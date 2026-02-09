@@ -3,15 +3,17 @@ from flask_cors import CORS
 from routes import api
 from db.database import init_db
 
-app = Flask(__name__)
+app = Flask(_name_)
 CORS(app)
 
 init_db()
-app.register_blueprint(api)
+
+# 🔥 THIS FIXES /api/papers
+app.register_blueprint(api, url_prefix="/api")
 
 @app.route("/")
 def home():
     return "PYQ Backend Running"
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     app.run(debug=True)
