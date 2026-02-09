@@ -6,9 +6,10 @@ from db.database import init_db
 app = Flask(_name_)
 CORS(app)
 
+# Initialize database
 init_db()
 
-# 🔥 THIS FIXES /api/papers
+# Register API routes with /api prefix
 app.register_blueprint(api, url_prefix="/api")
 
 @app.route("/")
