@@ -3,7 +3,7 @@ from flask_cors import CORS
 from routes import api
 from db.database import init_db
 
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app)
 
 init_db()
