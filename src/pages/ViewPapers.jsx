@@ -8,12 +8,12 @@ export default function ViewPapers() {
 
   useEffect(() => {
     fetch(`${BACKEND}/papers`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setPapers(Array.isArray(data) ? data : []);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Fetch error:", err);
         setLoading(false);
       });
@@ -42,16 +42,24 @@ export default function ViewPapers() {
           <p><b>Slot:</b> {paper.slot}</p>
           {paper.session && <p><b>Session:</b> {paper.session}</p>}
 
+          {/* VIEW (opens PDF in browser safely) */}
           <a
-            href={paper.file_url}
+            href={`https://docs.google.com/gview?url=${encodeURIComponent(
+              paper.file_url
+            )}&embedded=true`}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noreferrer"
             style={{ marginRight: 12, color: "#2563eb" }}
           >
             View
           </a>
 
-          <a href={paper.file_url} download>
+          {/* DOWNLOAD */}
+          <a
+            href={paper.file_url}
+            download
+            style={{ color: "#16a34a" }}
+          >
             Download
           </a>
         </div>
