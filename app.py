@@ -14,5 +14,5 @@ app.register_blueprint(api, url_prefix="/api")
 def home():
     return "PYQ Backend Running"
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     app.run()
