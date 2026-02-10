@@ -7,25 +7,30 @@ def get_papers():
     conn = get_db()
     cur = conn.cursor()
 
-    query = "SELECT subject, exam_type, slot, session, file_url FROM papers"
+    query = """
+        SELECT
+            id,
+            subject,
+            exam_type,
+            slot,
+            session,
+            file_url
+        FROM papers
+        WHERE status = 'approved'
+    """
     params = []
 
     if exam_type:
-        query += " WHERE exam_type=?"
+        query += " AND exam_type = %s"
         params.append(exam_type)
 
+    query += " ORDER BY created_at DESC"
+
     cur.execute(query, params)
-    rows = cur.fetchall()
+    papers = cur.fetchall()
+
+    cur.close()
     conn.close()
 
-    papers = []
-    for r in rows:
-        papers.append({
-            "subject": r[0],
-            "exam_type": r[1],
-            "slot": r[2],
-            "session": r[3],
-            "file_url": r[4]
-        })
-
+    # psycopg2 RealDictCursor already returns dicts
     return jsonify(papers)
