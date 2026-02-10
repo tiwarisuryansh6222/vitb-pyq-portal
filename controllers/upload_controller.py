@@ -2,8 +2,6 @@ from flask import request, jsonify
 from services.cloudinary_service import upload_pdf
 from db.database import get_db
 
-def upload_paper():
-    print("UPLOAD ROUTE HIT")
 
     try:
         if "file" not in request.files:
