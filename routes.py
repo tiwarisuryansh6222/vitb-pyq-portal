@@ -7,7 +7,7 @@ from controllers.admin_controller import (
     delete_paper
 )
 
-api = Blueprint("api", _name_)
+api = Blueprint("api", __name__)
 
 # Public routes
 api.route("/upload", methods=["POST"])(upload_paper)
