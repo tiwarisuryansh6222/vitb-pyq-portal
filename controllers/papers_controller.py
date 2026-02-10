@@ -8,13 +8,7 @@ def get_papers():
     cur = conn.cursor()
 
     query = """
-        SELECT
-            id,
-            subject,
-            exam_type,
-            slot,
-            session,
-            file_url
+        SELECT subject, exam_type, slot, session, file_url
         FROM papers
         WHERE status = 'approved'
     """
@@ -32,5 +26,4 @@ def get_papers():
     cur.close()
     conn.close()
 
-    # psycopg2 RealDictCursor already returns dicts
-    return jsonify(papers)
+    return jsonify(papers), 200

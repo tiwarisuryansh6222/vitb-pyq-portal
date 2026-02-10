@@ -1,7 +1,5 @@
 from dotenv import load_dotenv
 load_dotenv()
-import migrate_status
-migrate_status.run_migration()
 
 from flask import Flask
 from flask_cors import CORS
@@ -11,6 +9,7 @@ from db.database import init_db
 app = Flask(__name__)
 CORS(app)
 
+# Initialize DB (creates table if missing)
 init_db()
 
 app.register_blueprint(api, url_prefix="/api")
