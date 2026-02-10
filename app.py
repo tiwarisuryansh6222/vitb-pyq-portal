@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 load_dotenv()
+import migrate_status
 
 from flask import Flask
 from flask_cors import CORS
