@@ -29,9 +29,9 @@ def upload_paper():
         cur.execute(
             """
             INSERT INTO papers (subject, exam_type, slot, session, file_url, status)
-            VALUES (%s, %s, %s, %s, %s, 'pending')
+            VALUES (%s, %s, %s, %s, %s, %s)
             """,
-            (subject, exam_type, slot, session, file_url)
+            (subject, exam_type, slot, session, file_url, 'pending')
         )
 
         conn.commit()
