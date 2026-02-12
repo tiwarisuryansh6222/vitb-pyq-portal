@@ -42,25 +42,16 @@ export default function ViewPapers() {
           <p><b>Slot:</b> {paper.slot}</p>
           {paper.session && <p><b>Session:</b> {paper.session}</p>}
 
-          {/* VIEW (opens PDF in browser safely) */}
+          {/* VIEW */}
           <a
             href={`https://docs.google.com/gview?url=${encodeURIComponent(
               paper.file_url
             )}&embedded=true`}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             style={{ marginRight: 12, color: "#2563eb" }}
           >
             View
-          </a>
-
-          {/* DOWNLOAD */}
-          <a
-            href={paper.file_url}
-            download
-            style={{ color: "#16a34a" }}
-          >
-            Download
           </a>
         </div>
       ))}
