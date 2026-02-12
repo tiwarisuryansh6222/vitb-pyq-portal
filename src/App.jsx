@@ -11,7 +11,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/view" element={<ViewPapers />} />
-        <Route path="/admin" element={<Admin />} /> {/* 🔥 */}
+
+        {/* 🔒 Secret Admin Route */}
+        <Route path="/081024" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   );

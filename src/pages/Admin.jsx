@@ -5,45 +5,69 @@ const ADMIN_KEY = import.meta.env.VITE_ADMIN_KEY;
 
 export default function Admin() {
   const [papers, setPapers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchPending = useCallback(async () => {
+    if (!BACKEND) {
+      setError("Backend URL not configured");
+      return;
+    }
+
+    if (!ADMIN_KEY) {
+      setError("Admin key not configured");
+      return;
+    }
+
     try {
       setLoading(true);
+      setError(null);
 
       const res = await fetch(`${BACKEND}/admin/papers`, {
-        headers: { "x-admin-key": ADMIN_KEY }
+        headers: {
+          "x-admin-key": ADMIN_KEY
+        }
       });
 
-      if (!res.ok) throw new Error("Unauthorized");
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Unauthorized");
+      }
 
       const data = await res.json();
       setPapers(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Admin fetch error:", err);
+      setError("Failed to load pending papers");
     } finally {
       setLoading(false);
     }
   }, [BACKEND, ADMIN_KEY]);
 
   const approvePaper = async (id) => {
-    await fetch(`${BACKEND}/admin/approve/${id}`, {
-      method: "POST",
-      headers: { "x-admin-key": ADMIN_KEY }
-    });
-
-    fetchPending();
+    try {
+      await fetch(`${BACKEND}/admin/approve/${id}`, {
+        method: "POST",
+        headers: { "x-admin-key": ADMIN_KEY }
+      });
+      fetchPending();
+    } catch (err) {
+      console.error("Approve error:", err);
+    }
   };
 
   const deletePaper = async (id) => {
     if (!window.confirm("Delete this paper?")) return;
 
-    await fetch(`${BACKEND}/admin/delete/${id}`, {
-      method: "DELETE",
-      headers: { "x-admin-key": ADMIN_KEY }
-    });
-
-    fetchPending();
+    try {
+      await fetch(`${BACKEND}/admin/delete/${id}`, {
+        method: "DELETE",
+        headers: { "x-admin-key": ADMIN_KEY }
+      });
+      fetchPending();
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
   };
 
   useEffect(() => {
@@ -55,7 +79,10 @@ export default function Admin() {
       <h2>Admin Dashboard</h2>
 
       {loading && <p>Loading pending papers...</p>}
-      {!loading && papers.length === 0 && <p>No pending papers</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {!loading && papers.length === 0 && !error && (
+        <p>No pending papers</p>
+      )}
 
       {papers.map((p) => (
         <div
@@ -72,29 +99,47 @@ export default function Admin() {
           <p><b>Slot:</b> {p.slot}</p>
           {p.session && <p><b>Session:</b> {p.session}</p>}
 
-          {/* 🔥 FORCE PREVIEW USING IFRAME TAB */}
-          <a
-            href={`https://docs.google.com/gview?url=${encodeURIComponent(
-              p.file_url
-            )}&embedded=true`}
-            target="_blank"
-            rel="noopener noreferrer"
+          {/* Direct Preview */}
+          <button
+            onClick={() => window.open(p.file_url, "_blank")}
             style={{
               marginRight: 12,
-              color: "#2563eb",
-              fontWeight: "bold"
+              background: "#2563eb",
+              color: "white",
+              border: "none",
+              padding: "6px 12px",
+              borderRadius: 4,
+              cursor: "pointer"
             }}
           >
             View
-          </a>
+          </button>
 
-          <button onClick={() => approvePaper(p.id)}>
+          <button
+            onClick={() => approvePaper(p.id)}
+            style={{
+              background: "green",
+              color: "white",
+              border: "none",
+              padding: "6px 12px",
+              borderRadius: 4,
+              cursor: "pointer"
+            }}
+          >
             Approve
           </button>
 
           <button
             onClick={() => deletePaper(p.id)}
-            style={{ marginLeft: 10 }}
+            style={{
+              marginLeft: 10,
+              background: "red",
+              color: "white",
+              border: "none",
+              padding: "6px 12px",
+              borderRadius: 4,
+              cursor: "pointer"
+            }}
           >
             Delete
           </button>
