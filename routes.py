@@ -9,11 +9,11 @@ from controllers.admin_controller import (
 
 api = Blueprint("api", __name__)
 
-# Public routes
+# Public
 api.route("/upload", methods=["POST"])(upload_paper)
 api.route("/papers", methods=["GET"])(get_papers)
 
-# 🔐 Admin routes
+# Admin
 api.route("/admin/papers", methods=["GET"])(get_pending_papers)
 api.route("/admin/approve/<int:paper_id>", methods=["POST"])(approve_paper)
 api.route("/admin/delete/<int:paper_id>", methods=["DELETE"])(delete_paper)

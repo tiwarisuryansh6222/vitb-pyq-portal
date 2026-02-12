@@ -4,14 +4,13 @@ from psycopg2.extras import RealDictCursor
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+print("CONNECTED TO DATABASE:", DATABASE_URL)  # 👈 put it AFTER definition
+
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL is not set in environment variables")
 
 
 def get_db():
-    """
-    Returns a PostgreSQL database connection
-    """
     return psycopg2.connect(
         DATABASE_URL,
         cursor_factory=RealDictCursor,
@@ -20,9 +19,6 @@ def get_db():
 
 
 def init_db():
-    """
-    Initializes database tables
-    """
     conn = get_db()
     cur = conn.cursor()
 
