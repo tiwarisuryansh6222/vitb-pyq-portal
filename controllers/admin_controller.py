@@ -1,6 +1,7 @@
 from flask import jsonify
-from models.paper import Paper
-from models import db
+from db import db, Paper
+
+
 
 
 # Get all pending papers (for admin review)
