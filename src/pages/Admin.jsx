@@ -1,40 +1,83 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+const BACKEND = import.meta.env.VITE_BACKEND_URL;
 
 export default function Admin() {
+  const [papers, setPapers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPending = async () => {
+    try {
+      const res = await fetch(`${BACKEND}/admin/papers`);
+      const data = await res.json();
+      setPapers(data);
+    } catch (err) {
+      console.error("Error fetching pending papers:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPending();
+  }, []);
+
+  const approvePaper = async (id) => {
+    await fetch(`${BACKEND}/admin/approve/${id}`, {
+      method: "POST",
+    });
+    fetchPending();
+  };
+
+  const deletePaper = async (id) => {
+    await fetch(`${BACKEND}/admin/delete/${id}`, {
+      method: "DELETE",
+    });
+    fetchPending();
+  };
+
   return (
-    <div>
-      {/* Navigation */}
-      <nav className="navbar">
-        <div className="navbar-container">
-          <Link to="/" className="navbar-brand">
-            📚 PYQ Portal
-          </Link>
-          <div className="navbar-menu">
-            <Link to="/upload" className="navbar-link">Upload Paper</Link>
-            <Link to="/view" className="navbar-link">View Papers</Link>
-            <Link to="/081024" className="navbar-link active">Admin</Link>
+    <div className="container">
+      <h2>Admin Panel</h2>
+
+      {loading && <p>Loading...</p>}
+
+      {!loading && papers.length === 0 && (
+        <p>No pending papers.</p>
+      )}
+
+      {papers.map((paper) => (
+        <div key={paper.id} className="card" style={{ marginBottom: "15px" }}>
+          <h3>{paper.subject}</h3>
+          <p>{paper.exam_type} | {paper.slot} | {paper.session}</p>
+
+          <div style={{ display: "flex", gap: "10px" }}>
+            <a
+              href={paper.file_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn"
+            >
+              View
+            </a>
+
+            <button
+              className="btn"
+              onClick={() => approvePaper(paper.id)}
+            >
+              Approve
+            </button>
+
+            <button
+              className="btn"
+              style={{ background: "red" }}
+              onClick={() => deletePaper(paper.id)}
+            >
+              Delete
+            </button>
           </div>
         </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className="main-content">
-        <div className="container">
-          <div className="page-header">
-            <h1 className="page-title">🔒 Admin Panel</h1>
-            <p className="page-subtitle">
-              Manage papers and monitor system activity.
-            </p>
-          </div>
-
-          <div className="card">
-            <h3>Admin Dashboard</h3>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              Add your admin functionality here.
-            </p>
-          </div>
-        </div>
-      </main>
+      ))}
     </div>
   );
 }
