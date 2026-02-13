@@ -1,5 +1,6 @@
 from flask import jsonify
-from models import db, Paper
+from models import db
+from models.paper import Paper
 from services.cloudinary_service import delete_pdf
 
 
