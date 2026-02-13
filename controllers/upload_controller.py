@@ -1,45 +1,27 @@
 from flask import request, jsonify
 from services.cloudinary_service import upload_pdf
-from db.database import get_db
 
 def upload_paper():
-    print("UPLOAD ROUTE HIT")
+    if "file" not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
 
-    try:
-        if "file" not in request.files:
-            return jsonify({"error": "No file uploaded"}), 400
+    file = request.files["file"]
 
-        file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "Empty filename"}), 400
 
-        subject = request.form.get("subject")
-        exam_type = request.form.get("exam_type")
-        slot = request.form.get("slot")
-        session = request.form.get("session")
+    # Debug: check file size
+    file.seek(0, 2)
+    size = file.tell()
+    file.seek(0)
+    print("Received file size:", size)
 
-        # Upload to Cloudinary
-        upload_result = upload_pdf(file)
-        file_url = upload_result["secure_url"]
+    # Upload to Cloudinary
+    upload_result = upload_pdf(file)
 
-        print("Cloudinary URL:", file_url)
+    print("Cloudinary bytes:", upload_result.get("bytes"))
 
-        # Save to PostgreSQL
-        conn = get_db()
-        cur = conn.cursor()
-
-        cur.execute(
-            """
-            INSERT INTO papers (subject, exam_type, slot, session, file_url, status)
-            VALUES (%s, %s, %s, %s, %s, %s)
-            """,
-            (subject, exam_type, slot, session, file_url, 'pending')
-        )
-
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        return jsonify({"message": "Upload successful"}), 201
-
-    except Exception as e:
-        print("UPLOAD ERROR:", e)
-        return jsonify({"error": "Upload failed"}), 500
+    return jsonify({
+        "url": upload_result["secure_url"],
+        "public_id": upload_result["public_id"]
+    })

@@ -3,6 +3,7 @@ import Upload from "./pages/Upload";
 import ViewPapers from "./pages/ViewPapers";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
+import "./App.css";
 
 export default function App() {
   return (

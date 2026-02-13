@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL;
 
@@ -14,6 +14,8 @@ export default function Upload() {
     file: null
   });
 
+  const [isUploading, setIsUploading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -26,6 +28,8 @@ export default function Upload() {
       alert("Please select a PDF file");
       return;
     }
+
+    setIsUploading(true);
 
     const data = new FormData();
     data.append("file", form.file);
@@ -53,58 +57,113 @@ export default function Upload() {
     } catch (err) {
       console.error("UPLOAD ERROR:", err);
       alert("Upload failed ❌");
+    } finally {
+      setIsUploading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ padding: 20 }}>
-      <h2>Upload Paper</h2>
+    <div>
+      {/* Navigation */}
+      <nav className="navbar">
+        <div className="navbar-container">
+          <Link to="/" className="navbar-brand">
+            📚 PYQ Portal
+          </Link>
+          <div className="navbar-menu">
+            <Link to="/upload" className="navbar-link active">Upload Paper</Link>
+            <Link to="/view" className="navbar-link">View Papers</Link>
+          </div>
+        </div>
+      </nav>
 
-      <input
-        placeholder="Subject"
-        required
-        value={form.subject}
-        onChange={e => setForm({ ...form, subject: e.target.value })}
-      />
-      <br />
+      {/* Main Content */}
+      <main className="main-content">
+        <div className="container container-sm">
+          <div className="page-header">
+            <h1 className="page-title">Upload Paper</h1>
+            <p className="page-subtitle">
+              Share a question paper with your fellow students by uploading it here.
+            </p>
+          </div>
 
-      <select
-        required
-        value={form.exam_type}
-        onChange={e => setForm({ ...form, exam_type: e.target.value })}
-      >
-        <option value="">Select Exam</option>
-        <option>Mid Term</option>
-        <option>End Term</option>
-        <option>Supply</option>
-        <option>Arrear</option>
-      </select>
-      <br />
+          <div className="card">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label className="form-label">Subject Name *</label>
+                <input
+                  className="form-input"
+                  placeholder="e.g., Data Structures, Mathematics"
+                  required
+                  value={form.subject}
+                  onChange={e => setForm({ ...form, subject: e.target.value })}
+                />
+              </div>
 
-      <input
-        placeholder="Slot"
-        required
-        value={form.slot}
-        onChange={e => setForm({ ...form, slot: e.target.value })}
-      />
-      <br />
+              <div className="form-group">
+                <label className="form-label">Exam Type *</label>
+                <select
+                  className="form-select"
+                  required
+                  value={form.exam_type}
+                  onChange={e => setForm({ ...form, exam_type: e.target.value })}
+                >
+                  <option value="">Select Exam Type</option>
+                  <option>Mid Term</option>
+                  <option>End Term</option>
+                  <option>Supply</option>
+                  <option>Arrear</option>
+                </select>
+              </div>
 
-      <input
-        placeholder="Session"
-        value={form.session}
-        onChange={e => setForm({ ...form, session: e.target.value })}
-      />
-      <br />
+              <div className="form-group">
+                <label className="form-label">Slot *</label>
+                <input
+                  className="form-input"
+                  placeholder="e.g., A1, B2, C1"
+                  required
+                  value={form.slot}
+                  onChange={e => setForm({ ...form, slot: e.target.value })}
+                />
+              </div>
 
-      <input
-        type="file"
-        accept="application/pdf"
-        required
-        onChange={e => setForm({ ...form, file: e.target.files[0] })}
-      />
-      <br />
+              <div className="form-group">
+                <label className="form-label">Session</label>
+                <input
+                  className="form-input"
+                  placeholder="e.g., 2023-24, Winter 2024"
+                  value={form.session}
+                  onChange={e => setForm({ ...form, session: e.target.value })}
+                />
+              </div>
 
-      <button type="submit">Upload</button>
-    </form>
+              <div className="form-group">
+                <label className="form-label">PDF File *</label>
+                <input
+                  className="form-file"
+                  type="file"
+                  accept="application/pdf"
+                  required
+                  onChange={e => setForm({ ...form, file: e.target.files[0] })}
+                />
+                {form.file && (
+                  <p style={{ marginTop: 'var(--spacing-sm)', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                    Selected: {form.file.name}
+                  </p>
+                )}
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={isUploading}
+                className="btn btn-primary btn-block btn-lg"
+              >
+                {isUploading ? "⏳ Uploading..." : "📤 Upload Paper"}
+              </button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
