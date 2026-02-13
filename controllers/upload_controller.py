@@ -3,6 +3,7 @@ from services.cloudinary_service import upload_pdf
 from db.database import get_db
 
 def upload_paper():
+    print("--------------------------------------------------")
     print("UPLOAD ROUTE HIT")
 
     try:
@@ -16,13 +17,17 @@ def upload_paper():
         slot = request.form.get("slot")
         session = request.form.get("session")
 
-        # Upload to Cloudinary
+        # 1. Upload to Cloudinary
+        print(f"Uploading file: {file.filename}")
         upload_result = upload_pdf(file)
-        file_url = upload_result["secure_url"]
+        
+        # Get the secure URL from Cloudinary response
+        file_url = upload_result.get("secure_url")
 
-        print("Cloudinary URL:", file_url)
+        print("SUCCESS! Cloudinary URL:", file_url)
+        print("--------------------------------------------------")
 
-        # Save to PostgreSQL
+        # 2. Save to PostgreSQL
         conn = get_db()
         cur = conn.cursor()
 
@@ -38,7 +43,10 @@ def upload_paper():
         cur.close()
         conn.close()
 
-        return jsonify({"message": "Upload successful"}), 201
+        return jsonify({
+            "message": "Upload successful", 
+            "url": file_url
+        }), 201
 
     except Exception as e:
         print("UPLOAD ERROR:", e)

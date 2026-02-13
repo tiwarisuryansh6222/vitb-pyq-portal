@@ -1,6 +1,9 @@
-import os
 import cloudinary
 import cloudinary.uploader
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
@@ -10,11 +13,17 @@ cloudinary.config(
 )
 
 def upload_pdf(file):
-    original_filename = file.filename  # keeps .pdf
+    file.seek(0)
 
-    return cloudinary.uploader.upload(
-        file,
+    upload_result = cloudinary.uploader.upload(
+        file.stream,
         resource_type="raw",
         folder="pyq_papers",
+        public_id=file.filename,   # preserve filename
+        use_filename=True,
+        unique_filename=False,
         overwrite=True
     )
+
+    return upload_result
+
