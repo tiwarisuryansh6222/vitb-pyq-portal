@@ -1,5 +1,6 @@
 from flask import jsonify
-from models import db, Paper
+from db import db, Paper
+
 
 def delete_paper(paper_id):
     paper = Paper.query.get(paper_id)
