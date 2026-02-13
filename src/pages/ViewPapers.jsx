@@ -184,6 +184,7 @@ export default function ViewPapers() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-primary"
+                      style={{ textDecoration: 'none', display: 'inline-flex' }}
                     <a>
                       📄 View PDF
                     </a>
