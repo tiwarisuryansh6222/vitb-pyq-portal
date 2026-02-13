@@ -7,7 +7,7 @@ export default function Home() {
       <nav className="navbar">
         <div className="navbar-container">
           <Link to="/" className="navbar-brand">
-            📚 PYQ Portal
+            📚 VITB PYQs
           </Link>
           <div className="navbar-menu">
             <Link to="/upload" className="navbar-link">Upload Paper</Link>
@@ -21,9 +21,9 @@ export default function Home() {
         <div className="container">
           {/* Hero Section */}
           <div className="hero-section">
-            <h1 className="hero-title">PYQ Portal</h1>
+            <h1 className="hero-title">VITB PYQs</h1>
             <p className="hero-subtitle">
-              Access previous year question papers, upload new papers, and help fellow students prepare better for exams.
+              Access previous year question papers easily and help fellow students prepare better for exams.
             </p>
             <div className="hero-buttons">
               <Link to="/upload" className="btn btn-primary btn-lg">
@@ -38,7 +38,7 @@ export default function Home() {
           {/* Features Section */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'var(--spacing-lg)', marginTop: 'var(--spacing-2xl)' }}>
             <div className="card">
-              <h3 style={{ fontSize: '1.25rem', marginBottom: 'var(--spacing-sm)', color: 'var(--primary-color)' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: 'var(--spacing-sm)', color: 'var(--accent-purple)' }}>
                 📤 Easy Upload
               </h3>
               <p style={{ color: 'var(--text-secondary)', marginBottom: 0 }}>
@@ -47,7 +47,7 @@ export default function Home() {
             </div>
 
             <div className="card">
-              <h3 style={{ fontSize: '1.25rem', marginBottom: 'var(--spacing-sm)', color: 'var(--primary-color)' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: 'var(--spacing-sm)', color: 'var(--accent-purple)' }}>
                 🔍 Smart Search
               </h3>
               <p style={{ color: 'var(--text-secondary)', marginBottom: 0 }}>
@@ -56,7 +56,7 @@ export default function Home() {
             </div>
 
             <div className="card">
-              <h3 style={{ fontSize: '1.25rem', marginBottom: 'var(--spacing-sm)', color: 'var(--primary-color)' }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: 'var(--spacing-sm)', color: 'var(--accent-purple)' }}>
                 💾 Cloud Storage
               </h3>
               <p style={{ color: 'var(--text-secondary)', marginBottom: 0 }}>

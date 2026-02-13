@@ -68,7 +68,7 @@ export default function Upload() {
       <nav className="navbar">
         <div className="navbar-container">
           <Link to="/" className="navbar-brand">
-            📚 PYQ Portal
+            📚 VITB PYQs
           </Link>
           <div className="navbar-menu">
             <Link to="/upload" className="navbar-link active">Upload Paper</Link>
