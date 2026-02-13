@@ -75,9 +75,17 @@ export default function ViewPapers() {
 
           {/* Filter Section */}
           <div className="filter-section">
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: 'var(--spacing-lg)', color: 'var(--text-primary)' }}>
+            <h3
+              style={{
+                fontSize: "1.125rem",
+                fontWeight: 600,
+                marginBottom: "var(--spacing-lg)",
+                color: "var(--text-primary)"
+              }}
+            >
               🔍 Filter Papers
             </h3>
+
             <div className="filter-grid">
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <input
@@ -85,7 +93,10 @@ export default function ViewPapers() {
                   placeholder="Search by subject"
                   value={filters.subject}
                   onChange={(e) =>
-                    setFilters((prev) => ({ ...prev, subject: e.target.value }))
+                    setFilters((prev) => ({
+                      ...prev,
+                      subject: e.target.value
+                    }))
                   }
                 />
               </div>
@@ -95,7 +106,10 @@ export default function ViewPapers() {
                   className="form-select"
                   value={filters.exam_type}
                   onChange={(e) =>
-                    setFilters((prev) => ({ ...prev, exam_type: e.target.value }))
+                    setFilters((prev) => ({
+                      ...prev,
+                      exam_type: e.target.value
+                    }))
                   }
                 >
                   <option value="">All Exam Types</option>
@@ -112,7 +126,10 @@ export default function ViewPapers() {
                   placeholder="Filter by slot"
                   value={filters.slot}
                   onChange={(e) =>
-                    setFilters((prev) => ({ ...prev, slot: e.target.value }))
+                    setFilters((prev) => ({
+                      ...prev,
+                      slot: e.target.value
+                    }))
                   }
                 />
               </div>
@@ -123,16 +140,19 @@ export default function ViewPapers() {
                   placeholder="Filter by session"
                   value={filters.session}
                   onChange={(e) =>
-                    setFilters((prev) => ({ ...prev, session: e.target.value }))
+                    setFilters((prev) => ({
+                      ...prev,
+                      session: e.target.value
+                    }))
                   }
                 />
               </div>
             </div>
 
-            <button 
+            <button
               onClick={fetchPapers}
               className="btn btn-primary"
-              style={{ marginTop: 'var(--spacing-md)' }}
+              style={{ marginTop: "var(--spacing-md)" }}
             >
               Apply Filters
             </button>
@@ -142,13 +162,22 @@ export default function ViewPapers() {
           {loading && (
             <div className="loading-state">
               <div className="loading-spinner"></div>
-              <p style={{ marginTop: 'var(--spacing-md)' }}>Loading papers...</p>
+              <p style={{ marginTop: "var(--spacing-md)" }}>
+                Loading papers...
+              </p>
             </div>
           )}
 
           {!loading && papers.length === 0 && (
             <div className="empty-state">
-              <p style={{ fontSize: '1.125rem', marginBottom: 'var(--spacing-sm)' }}>📭 No papers found</p>
+              <p
+                style={{
+                  fontSize: "1.125rem",
+                  marginBottom: "var(--spacing-sm)"
+                }}
+              >
+                📭 No papers found
+              </p>
               <p>Try adjusting your filters or upload a new paper.</p>
             </div>
           )}
@@ -158,34 +187,41 @@ export default function ViewPapers() {
               {papers.map((paper) => (
                 <div key={paper.id} className="paper-card">
                   <h3 className="paper-title">{paper.subject}</h3>
-                  
+
                   <div className="paper-meta">
                     <div className="paper-meta-item">
                       <span className="paper-meta-label">Exam Type</span>
-                      <span className="paper-meta-value">{paper.exam_type}</span>
+                      <span className="paper-meta-value">
+                        {paper.exam_type}
+                      </span>
                     </div>
-                    
+
                     <div className="paper-meta-item">
                       <span className="paper-meta-label">Slot</span>
                       <span className="paper-meta-value">{paper.slot}</span>
                     </div>
-                    
+
                     {paper.session && (
                       <div className="paper-meta-item">
                         <span className="paper-meta-label">Session</span>
-                        <span className="paper-meta-value">{paper.session}</span>
+                        <span className="paper-meta-value">
+                          {paper.session}
+                        </span>
                       </div>
                     )}
                   </div>
 
                   <div className="paper-actions">
-                    
+                    <a
                       href={paper.file_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-primary"
-                      style={{ textDecoration: 'none', display: 'inline-flex' }}
-                    <a>
+                      style={{
+                        textDecoration: "none",
+                        display: "inline-flex"
+                      }}
+                    >
                       📄 View PDF
                     </a>
                   </div>
