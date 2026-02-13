@@ -27,3 +27,8 @@ def upload_pdf(file):
 
     return upload_result
 
+def delete_pdf(public_id):
+    return cloudinary.uploader.destroy(
+        public_id,
+        resource_type="raw"
+    )

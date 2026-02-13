@@ -1,103 +1,54 @@
-from flask import jsonify, request
-from db.database import get_db
-import os
-
-ADMIN_KEY = os.getenv("ADMIN_KEY")
-
-if not ADMIN_KEY:
-    print("⚠ WARNING: ADMIN_KEY not set in environment variables")
+from flask import jsonify
+from models import db, Paper
+from services.cloudinary_service import delete_pdf
 
 
-def check_admin(req):
-    key = req.headers.get("x-admin-key")
-
-    if not key or key != ADMIN_KEY:
-        return False
-
-    return True
-
-
+# Get all pending papers (for admin review)
 def get_pending_papers():
-    if not check_admin(request):
-        return jsonify({"error": "Unauthorized"}), 401
+    papers = Paper.query.filter_by(status="pending").all()
 
-    try:
-        conn = get_db()
-        cur = conn.cursor()
+    result = []
+    for p in papers:
+        result.append({
+            "id": p.id,
+            "subject": p.subject,
+            "url": p.url,
+            "status": p.status
+        })
 
-        cur.execute("""
-            SELECT id, subject, exam_type, slot, session, file_url, created_at
-            FROM papers
-            WHERE status = 'pending'
-            ORDER BY created_at DESC
-        """)
-
-        papers = cur.fetchall()
-
-        cur.close()
-        conn.close()
-
-        return jsonify(papers), 200
-
-    except Exception as e:
-        print("ADMIN FETCH ERROR:", e)
-        return jsonify({"error": "Failed to fetch pending papers"}), 500
+    return jsonify(result), 200
 
 
+# Approve a paper
 def approve_paper(paper_id):
-    if not check_admin(request):
-        return jsonify({"error": "Unauthorized"}), 401
+    paper = Paper.query.get(paper_id)
 
-    try:
-        conn = get_db()
-        cur = conn.cursor()
+    if not paper:
+        return jsonify({"error": "Paper not found"}), 404
 
-        # Check if paper exists
-        cur.execute("SELECT id FROM papers WHERE id = %s", (paper_id,))
-        if not cur.fetchone():
-            cur.close()
-            conn.close()
-            return jsonify({"error": "Paper not found"}), 404
+    paper.status = "approved"
+    db.session.commit()
 
-        cur.execute(
-            "UPDATE papers SET status = 'approved' WHERE id = %s",
-            (paper_id,)
-        )
-
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        return jsonify({"message": "Approved"}), 200
-
-    except Exception as e:
-        print("APPROVE ERROR:", e)
-        return jsonify({"error": "Failed to approve paper"}), 500
+    return jsonify({"message": "Paper approved successfully"}), 200
 
 
+# Delete a paper (from DB + Cloudinary)
 def delete_paper(paper_id):
-    if not check_admin(request):
-        return jsonify({"error": "Unauthorized"}), 401
+    paper = Paper.query.get(paper_id)
+
+    if not paper:
+        return jsonify({"error": "Paper not found"}), 404
 
     try:
-        conn = get_db()
-        cur = conn.cursor()
+        # Delete file from Cloudinary
+        if paper.public_id:
+            delete_pdf(paper.public_id)
 
-        # Check if paper exists
-        cur.execute("SELECT id FROM papers WHERE id = %s", (paper_id,))
-        if not cur.fetchone():
-            cur.close()
-            conn.close()
-            return jsonify({"error": "Paper not found"}), 404
+        # Delete from database
+        db.session.delete(paper)
+        db.session.commit()
 
-        cur.execute("DELETE FROM papers WHERE id = %s", (paper_id,))
-        conn.commit()
-
-        cur.close()
-        conn.close()
-
-        return jsonify({"message": "Deleted"}), 200
+        return jsonify({"message": "Paper deleted successfully"}), 200
 
     except Exception as e:
-        print("DELETE ERROR:", e)
-        return jsonify({"error": "Failed to delete paper"}), 500
+        return jsonify({"error": str(e)}), 500
