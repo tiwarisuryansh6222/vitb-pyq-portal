@@ -1,8 +1,6 @@
 from flask import jsonify
 from models.paper import Paper
 from models import db
-from services.cloudinary_service import delete_pdf
-
 
 
 # Get all pending papers (for admin review)
@@ -34,23 +32,14 @@ def approve_paper(paper_id):
     return jsonify({"message": "Paper approved successfully"}), 200
 
 
-# Delete a paper (from DB + Cloudinary)
+# Delete a paper (database only)
 def delete_paper(paper_id):
     paper = Paper.query.get(paper_id)
 
     if not paper:
         return jsonify({"error": "Paper not found"}), 404
 
-    try:
-        # Delete file from Cloudinary
-        if paper.public_id:
-            delete_pdf(paper.public_id)
+    db.session.delete(paper)
+    db.session.commit()
 
-        # Delete from database
-        db.session.delete(paper)
-        db.session.commit()
-
-        return jsonify({"message": "Paper deleted successfully"}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return jsonify({"message": "Paper deleted successfully"}), 200
