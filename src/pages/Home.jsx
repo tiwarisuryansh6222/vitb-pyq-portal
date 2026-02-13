@@ -66,6 +66,15 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-container">
+          <p className="footer-text">
+            Made by <span className="footer-name">Suryansh</span> and <span className="footer-name">Sparsh</span>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
