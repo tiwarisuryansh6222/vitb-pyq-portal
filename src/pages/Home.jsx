@@ -71,7 +71,7 @@ export default function Home() {
       <footer className="footer">
         <div className="footer-container">
           <p className="footer-text">
-            Made by <span className="footer-name">Suryansh</span> and <span className="footer-name">Sparsh</span>
+            Made by <span className="footer-name"></span> BH01-A524 <span className="footer-name"></span>
           </p>
         </div>
       </footer>
