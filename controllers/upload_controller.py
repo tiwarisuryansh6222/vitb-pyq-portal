@@ -1,42 +1,27 @@
 from flask import request, jsonify
 from services.cloudinary_service import upload_pdf
+from db.database import get_db
+
 
 def upload_paper():
-<<<<<<< HEAD
-    if "file" not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
-=======
     print("--------------------------------------------------")
     print("UPLOAD ROUTE HIT")
->>>>>>> bfc98e85f1c6b205f781bdfaa94487b309fc5a42
 
-    file = request.files["file"]
+    try:
+        if "file" not in request.files:
+            return jsonify({"error": "No file uploaded"}), 400
 
-    if file.filename == "":
-        return jsonify({"error": "Empty filename"}), 400
+        file = request.files["file"]
 
-    # Debug: check file size
-    file.seek(0, 2)
-    size = file.tell()
-    file.seek(0)
-    print("Received file size:", size)
+        subject = request.form.get("subject")
+        exam_type = request.form.get("exam_type")
+        slot = request.form.get("slot")
+        session = request.form.get("session")
 
-<<<<<<< HEAD
-    # Upload to Cloudinary
-    upload_result = upload_pdf(file)
-
-    print("Cloudinary bytes:", upload_result.get("bytes"))
-
-    return jsonify({
-        "url": upload_result["secure_url"],
-        "public_id": upload_result["public_id"]
-    })
-=======
         # 1. Upload to Cloudinary
         print(f"Uploading file: {file.filename}")
         upload_result = upload_pdf(file)
-        
-        # Get the secure URL from Cloudinary response
+
         file_url = upload_result.get("secure_url")
 
         print("SUCCESS! Cloudinary URL:", file_url)
@@ -59,11 +44,10 @@ def upload_paper():
         conn.close()
 
         return jsonify({
-            "message": "Upload successful", 
+            "message": "Upload successful",
             "url": file_url
         }), 201
 
     except Exception as e:
         print("UPLOAD ERROR:", e)
         return jsonify({"error": "Upload failed"}), 500
->>>>>>> bfc98e85f1c6b205f781bdfaa94487b309fc5a42
