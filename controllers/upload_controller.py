@@ -40,6 +40,6 @@ def upload_paper():
             "url": file_url
         }), 201
 
-    except Exception as e:
+    except Exception as e: 
         print("UPLOAD ERROR:", e)
         return jsonify({"error": "Upload failed"}), 500
