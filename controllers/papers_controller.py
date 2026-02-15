@@ -1,7 +1,6 @@
 from flask import jsonify, request
 from db.database import get_db
 
-
 def get_papers():
     subject = request.args.get("subject")
     exam_type = request.args.get("exam_type")
@@ -60,4 +59,5 @@ def get_papers_count():
     cur.close()
     conn.close()
 
-    return jsonify(result), 200
+    # Fix: Return as a proper JSON object
+    return jsonify({"total": result[0] if result else 0}), 200
