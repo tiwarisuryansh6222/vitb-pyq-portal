@@ -1,41 +1,6 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-
-const BACKEND = import.meta.env.VITE_BACKEND_URL;
 
 export default function Home() {
-  const [paperCount, setPaperCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCount = async () => {
-      try {
-        if (!BACKEND) {
-          console.error("VITE_BACKEND_URL is not defined");
-          setLoading(false);
-          return;
-        }
-
-        const res = await fetch(`${BACKEND}/papers/count`);
-        
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        
-        const data = await res.json();
-        console.log("Count data received:", data);
-        
-        setPaperCount(data.total || 0);
-      } catch (err) {
-        console.error("Count fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCount();
-  }, []);
-
   return (
     <div>
       {/* Navigation */}
@@ -60,18 +25,6 @@ export default function Home() {
             <p className="hero-subtitle">
               Access previous year question papers easily and help fellow students prepare better for exams.
             </p>
-
-            {/* Paper Count */}
-            <p className="paper-count" style={{ 
-              fontSize: '1.25rem', 
-              fontWeight: '600', 
-              color: 'var(--text-secondary)',
-              marginTop: 'var(--spacing-lg)',
-              marginBottom: 'var(--spacing-xl)'
-            }}>
-              {loading ? "📄 Loading..." : `📄 ${paperCount}+ papers available`}
-            </p>
-
             <div className="hero-buttons">
               <Link to="/upload" className="btn btn-primary btn-lg">
                 📤 Upload Paper
@@ -118,7 +71,7 @@ export default function Home() {
       <footer className="footer">
         <div className="footer-container">
           <p className="footer-text">
-            Made with 💜 by <span className="footer-name">Suryansh</span> and <span className="footer-name">Sparsh</span>
+            Made by <span className="footer-name">BH01</span>-<span className="footer-name">A524</span>
           </p>
         </div>
       </footer>
