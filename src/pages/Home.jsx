@@ -36,6 +36,18 @@ export default function Home() {
         </div>
       </nav>
 
+      {/* Maintenance Banner */}
+      <div style={{
+        background: "rgba(220, 38, 38, 0.15)",
+        border: "1px solid rgba(220, 38, 38, 0.4)",
+        color: "#fca5a5",
+        textAlign: "center",
+        padding: "10px 20px",
+        fontSize: "14px"
+      }}>
+        ⚠️ We are currently experiencing database issues. Some features may not work as expected. We're working on it!
+      </div>
+
       {/* Main Content */}
       <main className="main-content">
         <div className="container">
