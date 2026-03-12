@@ -10,7 +10,7 @@ export default function Admin() {
 
   const fetchPending = async () => {
     try {
-      const res = await fetch(`${BACKEND}/admin/papers`);
+      const res = await fetch(`${BACKEND}/api/admin/papers`);
       const data = await res.json();
       setPapers(data);
     } catch (err) {
@@ -22,7 +22,7 @@ export default function Admin() {
 
   const fetchFeedbacks = async () => {
     try {
-      const res = await fetch(`${BACKEND}/admin/feedbacks`);
+      const res = await fetch(`${BACKEND}/api/admin/feedbacks`);
       const data = await res.json();
       setFeedbacks(data);
     } catch (err) {
@@ -36,17 +36,17 @@ export default function Admin() {
   }, []);
 
   const approvePaper = async (id) => {
-    await fetch(`${BACKEND}/admin/approve/${id}`, { method: "POST" });
+    await fetch(`${BACKEND}/api/admin/approve/${id}`, { method: "POST" });
     fetchPending();
   };
 
   const deletePaper = async (id) => {
-    await fetch(`${BACKEND}/admin/delete/${id}`, { method: "DELETE" });
+    await fetch(`${BACKEND}/api/admin/delete/${id}`, { method: "DELETE" });
     fetchPending();
   };
 
   const deleteFeedback = async (id) => {
-    await fetch(`${BACKEND}/admin/feedback/${id}`, { method: "DELETE" });
+    await fetch(`${BACKEND}/api/admin/feedback/${id}`, { method: "DELETE" });
     fetchFeedbacks();
   };
 
@@ -108,10 +108,12 @@ export default function Admin() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div>
                   <h3 style={{ margin: "0 0 4px" }}>
-                    {fb.name || "Anonymous"} {fb.email && <span style={{ fontSize: "13px", color: "#a78bfa" }}>({fb.email})</span>}
+                    {fb.name || "Anonymous"}{" "}
+                    {fb.email && <span style={{ fontSize: "13px", color: "#a78bfa" }}>({fb.email})</span>}
                   </h3>
                   <p style={{ margin: "4px 0" }}>{renderStars(fb.rating)}</p>
                   <p style={{ margin: "8px 0 0", color: "#e2e8f0" }}>{fb.message}</p>
+                  <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#6b7280" }}>{fb.created_at}</p>
                 </div>
                 <button
                   className="btn"

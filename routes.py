@@ -18,5 +18,5 @@ api.route("/feedback", methods=["POST"])(submit_feedback)
 api.route("/admin/papers", methods=["GET"])(get_pending_papers)
 api.route("/admin/approve/<int:paper_id>", methods=["POST"])(approve_paper)
 api.route("/admin/delete/<int:paper_id>", methods=["DELETE"])(delete_paper)
-api.route("/admin/feedbacks", methods=["GET"])(get_feedback)                    # fixed: added 's'
-api.route("/admin/feedback/<int:feedback_id>", methods=["DELETE"])(delete_feedback)  # new
+api.route("/admin/feedbacks", methods=["GET"])(get_feedback)
+api.route("/admin/feedback/<int:feedback_id>", methods=["DELETE"])(delete_feedback)

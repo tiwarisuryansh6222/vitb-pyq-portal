@@ -38,7 +38,6 @@ def get_feedback():
     cur.close()
     conn.close()
 
-    # Convert to list of dicts so JSON keys are named properly
     feedbacks = []
     for row in rows:
         feedbacks.append({
