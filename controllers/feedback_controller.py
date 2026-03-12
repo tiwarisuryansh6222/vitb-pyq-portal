@@ -41,12 +41,12 @@ def get_feedback():
     feedbacks = []
     for row in rows:
         feedbacks.append({
-            "id": row[0],
-            "name": row[1],
-            "email": row[2],
-            "rating": row[3],
-            "message": row[4],
-            "created_at": str(row[5])
+            "id": row["id"],
+            "name": row["name"],
+            "email": row["email"],
+            "rating": row["rating"],
+            "message": row["message"],
+            "created_at": str(row["created_at"])
         })
 
     return jsonify(feedbacks), 200
