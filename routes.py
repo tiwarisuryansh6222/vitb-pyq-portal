@@ -2,6 +2,7 @@ from flask import Blueprint
 from controllers.upload_controller import upload_paper
 from controllers.feedback_controller import submit_feedback
 from controllers.papers_controller import get_papers, get_papers_count
+from controllers.feedback_controller import submit_feedback, get_feedback
 from controllers.admin_controller import (
     get_pending_papers,
     approve_paper,
@@ -23,3 +24,6 @@ api.route("/feedback", methods=["POST"])(submit_feedback)
 api.route("/admin/papers", methods=["GET"])(get_pending_papers)
 api.route("/admin/approve/<int:paper_id>", methods=["POST"])(approve_paper)
 api.route("/admin/delete/<int:paper_id>", methods=["DELETE"])(delete_paper)
+
+api.route("/feedback", methods=["POST"])(submit_feedback)
+api.route("/admin/feedback", methods=["GET"])(get_feedback)
