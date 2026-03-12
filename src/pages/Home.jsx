@@ -6,12 +6,22 @@ const BACKEND = "https://pyq-backend-4zj5.onrender.com";
 
 export default function Home() {
   const [ratingSummary, setRatingSummary] = useState(null);
+  const [backendError, setBackendError] = useState(false);
 
   useEffect(() => {
     fetch(`${BACKEND}/api/feedback/summary`)
-      .then(res => res.json())
-      .then(data => setRatingSummary(data))
-      .catch(err => console.error(err));
+      .then((res) => {
+        if (!res.ok) throw new Error("Backend error");
+        return res.json();
+      })
+      .then((data) => {
+        setRatingSummary(data);
+        setBackendError(false);
+      })
+      .catch((err) => {
+        console.error("Backend issue:", err);
+        setBackendError(true);
+      });
   }, []);
 
   const scrollToFeedback = () => {
@@ -29,6 +39,7 @@ export default function Home() {
           <Link to="/" className="navbar-brand">
             📚 VITB PYQs
           </Link>
+
           <div className="navbar-menu">
             <Link to="/upload" className="navbar-link">Upload Paper</Link>
             <Link to="/view" className="navbar-link">View Papers</Link>
@@ -36,17 +47,19 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Maintenance Banner */}
-      <div style={{
-        background: "rgba(220, 38, 38, 0.15)",
-        border: "1px solid rgba(220, 38, 38, 0.4)",
-        color: "#fca5a5",
-        textAlign: "center",
-        padding: "10px 20px",
-        fontSize: "14px"
-      }}>
-        ⚠️ We are currently experiencing database issues. Some features may not work as expected. We're working on it!
-      </div>
+      {/* Dynamic Maintenance Banner */}
+      {backendError && (
+        <div style={{
+          background: "rgba(220, 38, 38, 0.15)",
+          border: "1px solid rgba(220, 38, 38, 0.4)",
+          color: "#fca5a5",
+          textAlign: "center",
+          padding: "10px 20px",
+          fontSize: "14px"
+        }}>
+          ⚠️ We are currently experiencing database issues. Some features may not work right now. We are fixing it.
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="main-content">
@@ -80,26 +93,30 @@ export default function Home() {
               <Link to="/upload" className="btn btn-primary btn-lg">
                 📤 Upload Paper
               </Link>
+
               <Link to="/view" className="btn btn-secondary btn-lg">
                 📖 Browse Papers
               </Link>
+
               <button onClick={scrollToFeedback} className="btn btn-secondary btn-lg">
                 💬 Give Feedback
               </button>
             </div>
           </div>
 
-          {/* Features Section */}
+          {/* Features */}
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: "var(--spacing-lg)",
             marginTop: "var(--spacing-2xl)"
           }}>
+
             <div className="card">
               <h3 style={{ fontSize: "1.25rem", marginBottom: "var(--spacing-sm)", color: "var(--accent-purple)" }}>
                 📤 Easy Upload
               </h3>
+
               <p style={{ color: "var(--text-secondary)", marginBottom: 0 }}>
                 Upload question papers with details like subject, exam type, slot, and session in seconds.
               </p>
@@ -109,6 +126,7 @@ export default function Home() {
               <h3 style={{ fontSize: "1.25rem", marginBottom: "var(--spacing-sm)", color: "var(--accent-purple)" }}>
                 🔍 Smart Search
               </h3>
+
               <p style={{ color: "var(--text-secondary)", marginBottom: 0 }}>
                 Filter papers by subject, exam type, slot, and session to find exactly what you need.
               </p>
@@ -118,17 +136,20 @@ export default function Home() {
               <h3 style={{ fontSize: "1.25rem", marginBottom: "var(--spacing-sm)", color: "var(--accent-purple)" }}>
                 💾 Cloud Storage
               </h3>
+
               <p style={{ color: "var(--text-secondary)", marginBottom: 0 }}>
                 All papers are securely stored in the cloud and accessible anytime, anywhere.
               </p>
             </div>
+
           </div>
 
-          {/* Feedback Section */}
+          {/* Feedback */}
           <div id="feedback-section" style={{ marginTop: "100px" }}>
             <h2 style={{ textAlign: "center", marginBottom: "30px" }}>
               💬 Help Us Improve
             </h2>
+
             <Feedback />
           </div>
 
