@@ -23,13 +23,7 @@ export default function Admin() {
   const fetchFeedbacks = async () => {
     try {
       const res = await fetch(`${BACKEND}/api/admin/feedbacks`);
-<<<<<<< HEAD
-      console.log("Feedback response status:", res.status);
       const data = await res.json();
-      console.log("Feedbacks data:", data);
-=======
-      const data = await res.json();
->>>>>>> 8351b68af8b1b6048b89b7579b6b481c62dabf4d
       setFeedbacks(data);
     } catch (err) {
       console.error("Error fetching feedbacks:", err);
@@ -115,13 +109,9 @@ export default function Admin() {
                 <div>
                   <h3 style={{ margin: "0 0 4px" }}>
                     {fb.name || "Anonymous"}{" "}
-<<<<<<< HEAD
                     {fb.email && (
                       <span style={{ fontSize: "13px", color: "#a78bfa" }}>({fb.email})</span>
                     )}
-=======
-                    {fb.email && <span style={{ fontSize: "13px", color: "#a78bfa" }}>({fb.email})</span>}
->>>>>>> 8351b68af8b1b6048b89b7579b6b481c62dabf4d
                   </h3>
                   <p style={{ margin: "4px 0" }}>{renderStars(fb.rating)}</p>
                   <p style={{ margin: "8px 0 0", color: "#e2e8f0" }}>{fb.message}</p>
