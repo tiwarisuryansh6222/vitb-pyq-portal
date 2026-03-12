@@ -52,6 +52,22 @@ def get_feedback():
     return jsonify(feedbacks), 200
 
 
+def get_rating_summary():
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("SELECT COUNT(*) as total, AVG(rating) as avg_rating FROM feedback WHERE rating > 0")
+    row = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        "total": row["total"],
+        "avg_rating": round(float(row["avg_rating"]), 1) if row["avg_rating"] else 0
+    }), 200
+
+
 def delete_feedback(feedback_id):
     conn = get_db()
     cur = conn.cursor()
