@@ -1,15 +1,9 @@
 from flask import Blueprint
 from controllers.upload_controller import upload_paper
-from controllers.feedback_controller import submit_feedback
+from controllers.feedback_controller import submit_feedback, get_feedback, delete_feedback
 from controllers.papers_controller import get_papers, get_papers_count
-from controllers.feedback_controller import submit_feedback, get_feedback
-from controllers.admin_controller import (
-    get_pending_papers,
-    approve_paper,
-    delete_paper
-)
+from controllers.admin_controller import get_pending_papers, approve_paper, delete_paper
 
-# create blueprint FIRST
 api = Blueprint("api", __name__)
 
 # ---------------- PUBLIC ROUTES ----------------
@@ -17,13 +11,12 @@ api.route("/upload", methods=["POST"])(upload_paper)
 api.route("/papers", methods=["GET"])(get_papers)
 api.route("/papers/count", methods=["GET"])(get_papers_count)
 
-# ---------------- FEEDBACK ROUTE ----------------
+# ---------------- FEEDBACK ROUTES ----------------
 api.route("/feedback", methods=["POST"])(submit_feedback)
 
 # ---------------- ADMIN ROUTES ----------------
 api.route("/admin/papers", methods=["GET"])(get_pending_papers)
 api.route("/admin/approve/<int:paper_id>", methods=["POST"])(approve_paper)
 api.route("/admin/delete/<int:paper_id>", methods=["DELETE"])(delete_paper)
-
-api.route("/feedback", methods=["POST"])(submit_feedback)
-api.route("/admin/feedback", methods=["GET"])(get_feedback)
+api.route("/admin/feedbacks", methods=["GET"])(get_feedback)
+api.route("/admin/feedback/<int:feedback_id>", methods=["DELETE"])(delete_feedback)
