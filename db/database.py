@@ -11,11 +11,14 @@ if not DATABASE_URL:
 
 
 def get_db():
-    return psycopg2.connect(
-        DATABASE_URL,
-        cursor_factory=RealDictCursor
-    )
-
+    try:
+        return psycopg2.connect(
+            DATABASE_URL,
+            cursor_factory=RealDictCursor
+        )
+    except Exception as e:
+        print("DB CONNECTION ERROR:", e)
+        raise
 
 def init_db():
     conn = get_db()
