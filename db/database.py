@@ -12,9 +12,13 @@ if not DATABASE_URL:
 
 def get_db():
     return psycopg2.connect(
-        DATABASE_URL,
-        cursor_factory=RealDictCursor,
-        sslmode="require"
+        host="db.mseaagljvqramoufjlbn.supabase.co",
+        database="postgres",
+        user="postgres.mseaagljvqramoufjlbn", 
+        password="PyqPortal2026",
+        port=5432,
+        sslmode="require",
+        cursor_factory=RealDictCursor
     )
 
 
