@@ -33,4 +33,4 @@ pnpm-debug.log*
 Thumbs.db
 
 db/database.db
-*.sqlite3
+*.sqlite3".env" 
