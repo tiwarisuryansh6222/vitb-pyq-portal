@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Feedback from "../components/Feedback";
 
-const BACKEND = "https://pyq-backend-4zj5.onrender.com";
+const BACKEND = "https://vitb-pyq-portal-production.up.railway.app";
 
 export default function Home() {
   const [ratingSummary, setRatingSummary] = useState(null);
