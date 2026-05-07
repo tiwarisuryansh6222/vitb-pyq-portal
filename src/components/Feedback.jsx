@@ -69,7 +69,7 @@ function Feedback() {
     setLoading(true);
 
     try {
-      const res = await fetch("https://pyq-backend-4zj5.onrender.com/api/feedback", {
+      const res = await fetch("https://vitb-pyq-portal-production.up.railway.app/api/feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)

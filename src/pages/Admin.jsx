@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const BACKEND = "https://pyq-backend-4zj5.onrender.com";
+const BACKEND = "https://vitb-pyq-portal-production.up.railway.app";
 
 export default function Admin() {
   const [papers, setPapers] = useState([]);
