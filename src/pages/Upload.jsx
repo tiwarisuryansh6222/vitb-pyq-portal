@@ -41,7 +41,7 @@ export default function Upload() {
     console.log("Uploading to:", BACKEND + "/upload");
 
     try {
-      const res = await fetch(`${BACKEND}/upload`, {
+      const res = await fetch(`${BACKEND}/api/upload`, {
         method: "POST",
         body: data
       });

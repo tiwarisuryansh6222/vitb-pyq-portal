@@ -29,7 +29,7 @@ export default function ViewPapers() {
         if (value) params.append(key, value);
       });
 
-      const res = await fetch(`${BACKEND}/papers?${params.toString()}`);
+      const res = await fetch(`${BACKEND}/api/papers?${params.toString()}`);
 
       if (!res.ok) throw new Error("Failed to fetch papers");
 
