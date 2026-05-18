@@ -59,5 +59,4 @@ def get_papers_count():
     cur.close()
     conn.close()
 
-    # Fix: Return as a proper JSON object
-    return jsonify({"total": result[0] if result else 0}), 200
+    return jsonify({"total": result["total"] if result else 0}), 200
